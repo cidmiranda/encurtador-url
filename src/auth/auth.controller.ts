@@ -1,10 +1,8 @@
-import { Body, Controller, Post, HttpCode, HttpStatus, UseGuards } from "@nestjs/common";
+import { Body, Controller, Post, HttpCode, HttpStatus } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { User } from "../user/user.entity";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { Public } from "./strategy/public-strategy";
 import { UserDTO } from "src/user/dto/user.dto";
-import { AuthGuard } from "@nestjs/passport";
 
 @Controller("auth")
 @ApiTags("auth")
@@ -15,11 +13,6 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post("login")
   @ApiOperation({ summary: "User Login" })
-  @ApiResponse({
-    status: 200,
-    description: "The record found",
-    type: [User],
-  })
   async signIn(@Body() userDTO: UserDTO) {
     const user = await this.authService.validateUser(userDTO.email, userDTO.password);
     return this.authService.signIn(user);
@@ -29,11 +22,6 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post("signup")
   @ApiOperation({ summary: "User Signup" })
-  @ApiResponse({
-    status: 200,
-    description: "The record found",
-    type: [User],
-  })
   signUp(@Body() userDTO: UserDTO) {
     const payload = {
       email: userDTO.email, 
