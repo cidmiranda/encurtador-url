@@ -68,3 +68,6 @@ curl -X 'POST' \
 -H 'Content-Type: application/json' \
 -d '{"email": "cidmiranda@gmail.com","password": "12345"}'
 ```
+
+> [!IMPORTANT]
+> O Arquivo .env foi mantido pra evitar erros na execução do projeto
