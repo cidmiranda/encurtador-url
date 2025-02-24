@@ -3,9 +3,9 @@ import { UrlService } from './url.service';
 import { UrlsController } from './url.controller';
 import { UrlsRepository } from './url.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Url } from 'src/url/url.entity';
-import { UserService } from 'src/user/user.service';
-import { UserRepository } from 'src/user/user.repository';
+import { Url } from '../url/url.entity';
+import { UserService } from '../user/user.service';
+import { UserRepository } from '../user/user.repository';
 import { JwtService } from '@nestjs/jwt';
 
 @Module({
