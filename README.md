@@ -32,8 +32,7 @@ docker-compose -f docker-compose.yml -f dbadmin.yml up --build
 
 6. Acesse a documentação da aplicação em http://localhost:3000/api.
 
-![Swagger](https://drive.google.com/file/d/1ahJtYeJ9C7THLgHKbCfwud9D-os8kVGy/view?usp=sharing)
-Os serviços marcados com cadeado, requerem autenticação. O serviço de criar uma url encurtada (POST) é publico, mas identifica o usuário, se este passar um um token válido. Para testar esse serviço autenticado, sugerimos usar via linha de comando ou um cliente rest como o postman.
+Os serviços marcados com cadeado, requerem autenticação. O serviço de criar uma url encurtada (POST) é publico, mas identifica o usuário, se o usuário passar um  token válido. Para testar esse serviço autenticado, sugerimos usar via linha de comando ou um cliente rest como o postman.
 
 Create url (POST)
 
