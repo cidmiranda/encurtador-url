@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { User } from '../user/user.entity';
 import {
   Column,
@@ -33,6 +34,7 @@ export class Url {
   @Column()
   updatedAt: Date;
 
+  @Exclude({ toPlainOnly: true })
   @Column({ nullable: true })
   deletedAt?: Date;
 

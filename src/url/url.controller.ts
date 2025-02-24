@@ -1,5 +1,6 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -9,6 +10,7 @@ import {
   Put,
   Res,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateURLDto } from './dto/create-url.dto';
 import { GetURLDto } from './dto/get-url.dto';
@@ -24,6 +26,7 @@ import { NoCache } from '../interceptor/no-cache.decorator';
 
 @Controller()
 @ApiTags('url')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UrlsController {
   constructor(
     private readonly urlsService: UrlService,

@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Url } from '../url/url.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -9,7 +10,8 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column({ select: false })
+  @Exclude({ toPlainOnly: true })
+  @Column()
   password: string;
 
   @Column()
@@ -18,7 +20,7 @@ export class User {
   @Column()
   updatedAt: Date;
 
-  @Column({ select: false, nullable: true })
+  @Column({ nullable: true })
   deletedAt?: Date;
 
   @OneToMany(() => Url, (url) => url.user, { nullable: true })
