@@ -9,7 +9,7 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @Column()
@@ -18,7 +18,7 @@ export class User {
   @Column()
   updatedAt: Date;
 
-  @Column({ nullable: true })
+  @Column({ select: false, nullable: true })
   deletedAt?: Date;
 
   @OneToMany(() => Url, (url) => url.user, { nullable: true })

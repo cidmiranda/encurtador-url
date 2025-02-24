@@ -12,7 +12,7 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  @ApiOperation({ summary: 'User Login' })
+  @ApiOperation({ summary: 'User login' })
   async signIn(@Body() userDTO: UserDTO) {
     const user = await this.authService.validateUser(
       userDTO.email,
@@ -24,7 +24,7 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('signup')
-  @ApiOperation({ summary: 'User Signup' })
+  @ApiOperation({ summary: 'User signup' })
   signUp(@Body() userDTO: UserDTO) {
     const payload = {
       email: userDTO.email,
