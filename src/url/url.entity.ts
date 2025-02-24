@@ -1,36 +1,42 @@
 import { User } from 'src/user/user.entity';
-import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Url {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ nullable: true })
-    userId?: string
+  @Column({ nullable: true })
+  userId?: string;
 
-    @Column({ unique: true })
-    urlCode: string;
+  @Column({ unique: true })
+  urlCode: string;
 
-    @Column()
-    longUrl: string;
+  @Column()
+  longUrl: string;
 
-    @Column()
-    shortUrl: string;
+  @Column()
+  shortUrl: string;
 
-    @Column()
-    clicks: number;
+  @Column()
+  clicks: number;
 
-    @Column()
-    createdAt: Date;
+  @Column()
+  createdAt: Date;
 
-    @Column()
-    updatedAt: Date;
+  @Column()
+  updatedAt: Date;
 
-    @Column({ nullable: true })
-    deletedAt?: Date;
+  @Column({ nullable: true })
+  deletedAt?: Date;
 
-    @ManyToOne(() => User, (user) => user.urls, { nullable: true })
-    @JoinColumn({ name: 'userId', referencedColumnName: "id" })
-    user?: User
+  @ManyToOne(() => User, (user) => user.urls, { nullable: true })
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
+  user?: User;
 }

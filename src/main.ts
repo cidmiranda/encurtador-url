@@ -4,7 +4,6 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  
   const logger = new Logger();
   const app = await NestFactory.create(AppModule);
   const port = process.env.PORT ?? 3000;
@@ -13,23 +12,20 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Encurtador de URL')
-    .setDescription('O caminho mais curto para uma URL')
+    .setDescription('O caminho mais curto')
     .setVersion('0.0.1')
     .addTag('url')
-    .addBearerAuth(
-      { 
-        description: `[just text field] Please enter token in following format: Bearer <JWT>`,
-        name: 'Authorization',
-        bearerFormat: 'Bearer',
-        scheme: 'Bearer',
-        type: 'http',
-        in: 'Header'
-      },
-    )
+    .addBearerAuth({
+      description: `Please enter token in following format: Bearer <JWT>`,
+      name: 'Authorization',
+      bearerFormat: 'Bearer',
+      scheme: 'Bearer',
+      type: 'http',
+      in: 'Header',
+    })
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
-
 
   await app.listen(port);
 
