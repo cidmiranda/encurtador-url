@@ -58,8 +58,9 @@ curl -X 'POST' \
 -d '{"email": "cidmiranda@gmail.com","password": "12345"}'
 ```
 
-E então realizar o login
-User signup (POST)
+E então realizar o login, recebendo o access_token (JWT)
+
+User login (POST)
 
 ```bash
 curl -X 'POST' \
