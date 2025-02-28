@@ -1,25 +1,26 @@
-import { Body, Controller, Post, HttpCode, HttpStatus, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
+import { Body, Controller, Post, HttpCode, HttpStatus, UseInterceptors, ClassSerializerInterceptor, UseGuards, Request, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Public } from './strategy/public-strategy';
+import { Public } from './public-strategy';
 import { UserDTO } from '../user/dto/user.dto';
+import { LocalAuthGuard } from './local-auth.guard';
 
 @Controller('auth')
 @ApiTags('auth')
-@UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Public()
-  @HttpCode(HttpStatus.OK)
+  @UseGuards(LocalAuthGuard)
   @Post('login')
   @ApiOperation({ summary: 'User login' })
-  async signIn(@Body() userDTO: UserDTO) {
-    const user = await this.authService.validateUser(
-      userDTO.email,
-      userDTO.password,
-    );
-    return this.authService.signIn(user);
+  async signIn(@Request() req, @Body() userDTO: UserDTO) {
+    return this.authService.signIn(userDTO, req.user.id);
+  }
+
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user;
   }
 
   @Public()

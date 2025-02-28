@@ -1,68 +1,52 @@
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
-  Headers,
   Param,
   Post,
   Put,
+  Request,
   Res,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { CreateURLDto } from './dto/create-url.dto';
 import { GetURLDto } from './dto/get-url.dto';
 import { UpdateURLDto } from './dto/update-url.dto';
 import { Url } from './url.entity';
 import { UrlService } from './url.service';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '../auth/guard/auth.guard';
-import { Public } from '../auth/strategy/public-strategy';
-import { JwtService } from '@nestjs/jwt';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Public } from '../auth/public-strategy';
 import { Response } from 'express';
 import { NoCache } from '../interceptor/no-cache.decorator';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller()
 @ApiTags('url')
-@UseInterceptors(ClassSerializerInterceptor)
 export class UrlsController {
-  constructor(
-    private readonly urlsService: UrlService,
-    private jwtService: JwtService,
-  ) {}
+  constructor(private readonly urlsService: UrlService) {}
 
   @ApiOperation({ summary: 'Get urls by user' })
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get()
-  getAllUrls(@Headers('Authorization') auth: string): Promise<Url[]> {
-    const { sub } = this.jwtService.decode(auth.replace('Bearer ', ''));
-    return this.urlsService.getAllURLsByUser(sub);
+  getAllUrls(@Request() req): Promise<Url[]> {
+    return this.urlsService.getAllURLsByUser(req.user.id);
   }
 
   @ApiOperation({ summary: 'Create url' })
-  @Public()
+  @UseGuards(JwtAuthGuard)
   @Post()
   createUrl(
-    @Headers('Authorization') auth: string | null,
+    @Request() req,
     @Body() createUrlDto: CreateURLDto,
   ): Promise<Url | null> {
-    let id;
-    if (auth) {
-      const { sub } = this.jwtService.decode(auth.replace('Bearer ', ''));
-      id = sub;
-    }
-    return this.urlsService.createUrl(createUrlDto, id);
+    return this.urlsService.createUrl(createUrlDto, req.user.id);
   }
 
   @ApiOperation({ summary: 'Update url' })
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Put('/:id')
   updateUrl(
-    @Headers('Authorization') auth: string,
     @Param() getUrlDto: GetURLDto,
     @Body() updateUrlDto: UpdateURLDto,
   ): Promise<Url> {
@@ -70,8 +54,7 @@ export class UrlsController {
   }
 
   @ApiOperation({ summary: 'Delete url' })
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   deleteLink(@Param() getURLDto: GetURLDto): Promise<void> {
     return this.urlsService.deleteUrl(getURLDto);

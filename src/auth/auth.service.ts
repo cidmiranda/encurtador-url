@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { User } from '../user/user.entity';
 import * as bcrypt from 'bcrypt';
+import { UserDTO } from 'src/user/dto/user.dto';
 
 @Injectable()
 export class AuthService {
@@ -15,29 +16,26 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(email, pass) {
-    const user = await this.usersService.findOneBy(email);
-    if (!user) {
-      throw new BadRequestException('User does not exist');
+  async validateUser(email: string, pass: string): Promise<any> {
+    const user = await this.usersService.findOneByEmail(email);
+    if (user) {
+      const isMatch: boolean = bcrypt.compareSync(pass, user.password);
+        if (isMatch) {
+          return user;
+        }
     }
-
-    const isMatch: boolean = bcrypt.compareSync(pass, user.password);
-    if (!isMatch) {
-      throw new BadRequestException('Email or Password does not match');
-    }
-
-    return user;
+    return null;
   }
 
-  async signIn(user: User) {
-    const payload = { sub: user.id, email: user.email };
+  async signIn(user: any, id: number) {
+    const payload = { email: user.email, id: id };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: await this.jwtService.sign(payload),
     };
   }
 
   async signUp(payload: CreateUserDto) {
-    const existingUser = await this.usersService.findOneBy(payload.email);
+    const existingUser = await this.usersService.findOneByEmail(payload.email);
     if (existingUser) {
       throw new BadRequestException('Email already exists');
     }
