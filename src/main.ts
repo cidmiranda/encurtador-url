@@ -23,6 +23,7 @@ async function bootstrap() {
       type: 'http',
       in: 'Header',
     })
+    .addSecurityRequirements('bearer')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
